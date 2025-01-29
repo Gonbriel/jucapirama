@@ -10,21 +10,32 @@ load_dotenv()
 llm = OpenAI(model='gpt-4o-mini', api_key=str(os.getenv('OPENAI_KEY')))
 
 async def main():
+
+    print("Welcome! Type your question or 'exit' for quit.")
+
+    workflow = AgentWorkflow.from_tools_or_functions(
+            [search_web],
+            llm=llm,
+            system_prompt=(
+                "You are a helpful assistant. You can search the web if the user's question requires fresh information. "
+                "Use your internal knowledge when possible, but if the question is about recent events, trends, or unknown topics, "
+                "call the 'search_web' tool."
+            ),
+        )
+    
     while True:
-        input_user = str(input('Input here: '))
+        input_user = str(input('\nInput here: ')).strip()
 
         if input_user.lower() == 'exit':
             print('System out...')
-            return
+            break
 
-        workflow = AgentWorkflow.from_tools_or_functions(
-            [search_web],
-            llm=llm,
-            system_prompt="You are a helpful assistant that can search the web for information.",
-        )
-
+    try:
         response = await workflow.run(user_msg=input_user)
-        print(str(response))
+        print('\nResponse:', response)
+    
+    except Exception as e:
+        print(f'Error: {str(e)}. Try again.')
 
 if __name__ == '__main__':
     asyncio.run(main())
