@@ -30,12 +30,12 @@ async def main():
             print('System out...')
             break
 
-    try:
-        response = await workflow.run(user_msg=input_user)
-        print('\nResponse:', response)
-    
-    except Exception as e:
-        print(f'Error: {str(e)}. Try again.')
+        try:
+            response = await workflow.arun(user_msg=input_user)
+            print('\nResponse:', response)
+        
+        except Exception as e:
+            print(f'Error: {str(e)}. Try again.')
 
 if __name__ == '__main__':
     asyncio.run(main())
