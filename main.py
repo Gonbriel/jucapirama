@@ -31,7 +31,7 @@ async def main():
             break
 
         try:
-            response = await workflow.arun(user_msg=input_user)
+            response = await workflow.run(user_msg=input_user)
             print('\nResponse:', response)
         
         except Exception as e:
