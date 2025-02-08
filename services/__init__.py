@@ -1,1 +1,1 @@
-from .search_web import search_web
+from services import search_web, import_data
