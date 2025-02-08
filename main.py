@@ -3,7 +3,7 @@ from llama_index.core.agent.workflow import AgentWorkflow
 import os
 import asyncio
 from dotenv import load_dotenv
-from services import search_web
+from services import search_web, import_csv, import_xlsx
 
 load_dotenv()
 
