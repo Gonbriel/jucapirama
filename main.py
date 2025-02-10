@@ -3,7 +3,7 @@ from llama_index.core.agent.workflow import AgentWorkflow
 import os
 import asyncio
 from dotenv import load_dotenv
-from services import search_web, import_csv, import_xlsx, csv_to_xlsx, csv_to_csv
+from services import search_web, import_csv, import_xlsx, csv_to_xlsx, csv_to_csv, scatter
 
 load_dotenv()
 
@@ -18,7 +18,8 @@ async def main():
              import_csv,
              import_xlsx,
              csv_to_xlsx,
-             csv_to_csv],
+             csv_to_csv,
+             scatter],
             llm=llm,
             system_prompt=(
                 "You are a helpful assistant. You can search the web if the user's question requires fresh information. "
