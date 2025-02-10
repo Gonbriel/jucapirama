@@ -12,28 +12,54 @@ def get_datas_dir() -> Path:
 
     raise FileNotFoundError('Dir "datas" not found.')
 
-def import_csv(file: str) -> pd.DataFrame:
+def import_csv(file: str):
     """
-    Read the data.csv file and return a pandas DataFrame with the data.
+    Reads a CSV file and returns a DataFrame and its string version (CSV format).
+    
+    Args:
+        file (str): CSV file name.
     
     Returns:
-        pd.DataFrame: The data in the data.csv file.
+        tuple[pd.DataFrame, str]: DataFrame and CSV string version.
     """
     datas_dir = get_datas_dir()
     files_way = datas_dir / file
 
-    data = pd.read_csv(files_way)
-    return data
+    if not files_way.exists():
+        Warning = 'File not found. Examine the file name and try again. Check if the file is in the "datas" folder.'
+        return Warning
 
-def import_xlsx(file: str) -> pd.DataFrame:
+    df = pd.read_csv(files_way)
+    
+    data_csv = df.to_csv(index=False)
+    
+    return df, data_csv
+
+
+def import_xlsx(file: str):
     """
-    Read the file.xlsx file and return a pandas DataFrame with the data.
+    Reads an XLSX file and returns a DataFrame and its string version (CSV format).
+    
+    Args:
+        file (str): Name of the XLSX file.
     
     Returns:
-        pd.DataFrame: The data in the file.xlsx file.
+        tuple[pd.DataFrame, str]: DataFrame and CSV string version.
     """
+
+    print('Importing xlsx data...')
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_rows', None)
+
     datas_dir = get_datas_dir()
     files_way = datas_dir / file
 
-    data = pd.read_excel(files_way)
-    return data
+    if not files_way.exists():
+        Warning = 'File not found. Examine the file name and try again. Check if the file is in the "datas" folder.'
+        return Warning
+
+    df = pd.read_excel(files_way)
+    
+    data_csv = df.to_csv(index=False)
+    
+    return df, data_csv
