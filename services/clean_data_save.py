@@ -32,4 +32,3 @@ def csv_to_csv(table_string: str, output_file: str):
     df.to_csv(output_file, index=False)
     print(f"Table saved as {output_file}")
     return df, data_csv
-

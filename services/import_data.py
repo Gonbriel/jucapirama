@@ -1,5 +1,5 @@
 import pandas as pd
-from pathlib import Path, os
+from pathlib import Path
 
 def get_datas_dir() -> Path:
     current_path = Path(__file__).resolve().parent
@@ -55,8 +55,8 @@ def import_xlsx(file: str):
     files_way = datas_dir / file
 
     if not files_way.exists():
-        Warning = 'File not found. Examine the file name and try again. Check if the file is in the "datas" folder.'
-        return Warning
+        warning = 'File not found. Examine the file name and try again. Check if the file is in the "datas" folder.'
+        return warning
 
     df = pd.read_excel(files_way)
     

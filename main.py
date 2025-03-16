@@ -1,13 +1,20 @@
-from llama_index.llms.openai import OpenAI
+from llama_index.llms.gemini import Gemini
 from llama_index.core.agent.workflow import AgentWorkflow
+from llama_index.core import Settings
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 import os
 import asyncio
 from dotenv import load_dotenv
-from services import search_web, import_csv, import_xlsx, csv_to_xlsx, csv_to_csv, scatter
+from services import *
 
 load_dotenv()
 
-llm = OpenAI(model='gpt-4o-mini', api_key=str(os.getenv('OPENAI_KEY')))
+llm = Gemini(api_key=os.getenv('GEMINI_KEY'), model='models/gemini-2.0-flash')
+Settings.llm = llm
+
+Settings.embed_model = HuggingFaceEmbedding(
+    model_name="BAAI/bge-small-en-v1.5"
+)
 
 async def main():
 
@@ -19,13 +26,17 @@ async def main():
              import_xlsx,
              csv_to_xlsx,
              csv_to_csv,
-             scatter],
+             rag],
             llm=llm,
-            system_prompt=(
-                "You are a helpful assistant. You can search the web if the user's question requires fresh information. "
-                "Use your internal knowledge when possible, but if the question is about recent events, trends, or unknown topics, "
-                "call the 'search_web' tool."
-            ),
+            system_prompt = """Your goal is to clean tables for statistical analysis.
+
+                                .Import the table.
+                                .Identify if there is metadata in the first few rows and remove it.
+                                .Adjust the header appropriately.
+                                .Convert numeric values ​​that are in text.
+                                .Use examples of clean tables whenever possible.
+                                .Prioritize using RAG before making manual decisions."""
+
         )
     
     while True:
